@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useProducts } from '../../hooks/useProducts'
 
 const ProductListPage = () => {
@@ -13,6 +14,8 @@ const ProductListPage = () => {
         {products?.map((product) => (
           <li key={product.id}>
             {product.name}-{product.price.toLocaleString()}원
+            <br />
+            <Link to={`/products/${product.id}`}>상세보기</Link>
           </li>
         ))}
       </ul>
