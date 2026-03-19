@@ -1,25 +1,21 @@
-import { isLoggedInAtom, userAtom } from '../jotai/auth.atom'
+import { userAtom } from '../jotai/auth.atom'
 import { useAtom } from 'jotai'
+import { loginService } from '../services/auth.services'
 
 export const useAuth = () => {
-  const [isLoggedIn, setIsLoggedIn] = useAtom(isLoggedInAtom)
   const [user, setUser] = useAtom(userAtom)
 
-  const login = () => {
-    setIsLoggedIn(true)
-    setUser({
-      id: 1,
-      name: 'Esther',
-    })
+  const login = async (id: string, password: string) => {
+    const data = await loginService(id, password)
+    setUser(data)
   }
 
   const logout = () => {
-    setIsLoggedIn(false)
     setUser(null)
   }
 
   return {
-    isLoggedIn,
+    isLogin: !!user,
     user,
     login,
     logout,

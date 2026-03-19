@@ -1,18 +1,60 @@
+import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 
 const HomePage = () => {
-  const { isLoggedIn, user, login, logout } = useAuth()
+  const { isLogin, user, login, logout } = useAuth()
+
+  const [id, setId] = useState('')
+  const [pw, setPw] = useState('')
+  const [error, setError] = useState('')
+
+  const handleLogin = async () => {
+    try {
+      setError('')
+      await login(id, pw)
+    } catch (e: any) {
+      setError(e.message)
+    }
+  }
+
+  const handleLogout = () => {
+    logout()
+    setError('')
+  }
+
   return (
     <div>
-      <h1>홈 페이지</h1>
+      <h1>Home Page</h1>
 
-      <p>현재 로그인 여부: {isLoggedIn ? '로그인' : '비로그인'}</p>
-      <p>현재 사용자: {user ? user.name : '없음'}</p>
+      <p>Login status: {isLogin ? 'Logged in' : 'Logged out'}</p>
+      <p>Current user: {user ? user.name : 'None'}</p>
 
-      <button onClick={login}>로그인</button>
-      <button onClick={logout} style={{ marginLeft: '8px' }}>
-        로그아웃
-      </button>
+      <div>
+        <input
+          type="text"
+          placeholder="ID"
+          value={id}
+          onChange={(e) => setId(e.target.value)}
+        />
+      </div>
+
+      <div style={{ marginTop: '8px' }}>
+        <input
+          type="password"
+          placeholder="Password"
+          value={pw}
+          onChange={(e) => setPw(e.target.value)}
+        />
+      </div>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <div style={{ marginTop: '8px' }}>
+        <button onClick={handleLogin}>Login</button>
+        <button onClick={handleLogout} style={{ marginLeft: '8px' }}>
+          Logout
+        </button>
+      </div>
     </div>
   )
 }
