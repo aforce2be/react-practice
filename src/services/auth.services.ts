@@ -1,12 +1,15 @@
-export const loginService = async (id: string, password: string) => {
-  await new Promise((res) => setTimeout(res, 500))
+import { LoginFormValues } from '../types/auth.interface'
 
-  if (id === 'admin' && password === '1234') {
+export async function loginApi(data: LoginFormValues) {
+  await new Promise((resolve) => setTimeout(resolve, 1000))
+
+  if (data.email === 'admin@test.com' && data.password === '123456') {
     return {
       id: 1,
       name: '관리자',
+      email: data.email,
     }
   }
 
-  throw new Error('로그인 실패')
+  throw new Error('이메일 또는 비밀번호가 올바르지 않습니다.')
 }

@@ -1,13 +1,16 @@
+import { useAtomValue, useSetAtom } from 'jotai'
+import { loginApi } from '../services/auth.services'
+import { LoginFormValues } from '../types/auth.interface'
 import { userAtom } from '../jotai/auth.atom'
-import { useAtom } from 'jotai'
-import { loginService } from '../services/auth.services'
 
-export const useAuth = () => {
-  const [user, setUser] = useAtom(userAtom)
+export function useAuth() {
+  const user = useAtomValue(userAtom)
+  const setUser = useSetAtom(userAtom)
 
-  const login = async (id: string, password: string) => {
-    const data = await loginService(id, password)
-    setUser(data)
+  const login = async (formValues: LoginFormValues) => {
+    const nextUser = await loginApi(formValues)
+    setUser(nextUser)
+    return nextUser
   }
 
   const logout = () => {
@@ -15,7 +18,7 @@ export const useAuth = () => {
   }
 
   return {
-    isLogin: !!user,
+    isLogin: user !== null,
     user,
     login,
     logout,
